@@ -9,7 +9,8 @@ import { Keyboard } from './Keyboard';
 
 const FROM = 36; // C2
 const TO = 96; // C7
-const WHITE_W = 34;
+/** Largeur des blanches du sélecteur : ≥38 px pour les pouces. */
+export const PICKER_WHITE_W = 38;
 
 export function whiteIndexOf(midi: number, from = FROM): number {
   let idx = 0;
@@ -32,7 +33,7 @@ export function RangePicker({ low, high, onChange }: RangePickerProps) {
   useEffect(() => {
     const el = scrollRef.current;
     if (el) {
-      const center = whiteIndexOf(Math.round((low + high) / 2)) * WHITE_W;
+      const center = whiteIndexOf(Math.round((low + high) / 2)) * PICKER_WHITE_W;
       el.scrollLeft = Math.max(0, center - el.clientWidth / 2);
     }
     return () => {
@@ -86,7 +87,7 @@ export function RangePicker({ low, high, onChange }: RangePickerProps) {
         <Keyboard
           from={FROM}
           to={TO}
-          whiteWidth={WHITE_W}
+          whiteWidth={PICKER_WHITE_W}
           whiteHeight={150}
           labelCs
           highlights={{ [low]: 'var(--green)', [high]: 'var(--green)' }}

@@ -33,6 +33,11 @@ body {
   overscroll-behavior-y: none;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   background: var(--bg);
@@ -351,6 +356,7 @@ svg text {
 .keys-scroll {
   overflow-x: auto;
   touch-action: pan-x;
+  overscroll-behavior-x: contain;
   -webkit-overflow-scrolling: touch;
   padding: 6px 0;
 }
@@ -425,6 +431,58 @@ svg text {
 
 .attrib p {
   margin: 4px 0;
+}
+
+/* ---------- adaptations petits écrans / paysage ---------- */
+
+@media (max-height: 700px) {
+  .exercise-main {
+    gap: 12px;
+  }
+
+  .interval-display {
+    font-size: clamp(60px, 26vw, 120px);
+  }
+
+  .next-btn {
+    height: 78px;
+    font-size: 26px;
+  }
+}
+
+@media (max-height: 520px) {
+  .topbar {
+    padding: 6px 14px;
+  }
+
+  .brand {
+    display: none;
+  }
+
+  .exercise-main {
+    gap: 8px;
+  }
+
+  .interval-display {
+    font-size: 56px;
+  }
+
+  .replay-hint {
+    display: none;
+  }
+
+  .strip-caption {
+    min-height: 20px;
+    padding-top: 4px;
+    font-size: 15px;
+  }
+
+  .next-btn {
+    height: 56px;
+    margin: 6px 14px calc(8px + env(safe-area-inset-bottom));
+    border-radius: 14px;
+    font-size: 20px;
+  }
 }
 
 /* ---------- assistant de premier lancement ---------- */

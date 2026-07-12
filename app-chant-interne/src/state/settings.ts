@@ -15,6 +15,9 @@ export interface Settings {
   timbre: TimbreId;
   beginnerMode: boolean;
   holdPlays: HoldPlays;
+  /** Mode révision : tenir NEXT rejoue sans avancer, un appui bref avance.
+   *  false = spec de Theo (lâcher = exercice suivant). */
+  freeRelisten: boolean;
   showStrip: boolean;
 }
 
@@ -27,6 +30,7 @@ export const DEFAULT_SETTINGS: Settings = {
   timbre: 'piano',
   beginnerMode: false,
   holdPlays: 'nc',
+  freeRelisten: false,
   showStrip: true,
 };
 
@@ -80,6 +84,7 @@ export function loadSettings(storage: StorageLike | null = defaultStorage()): Se
   if (r.timbre === 'piano' || r.timbre === 'organ' || r.timbre === 'pad') out.timbre = r.timbre;
   if (typeof r.beginnerMode === 'boolean') out.beginnerMode = r.beginnerMode;
   if (r.holdPlays === 'nc' || r.holdPlays === 'ne-then-nc') out.holdPlays = r.holdPlays;
+  if (typeof r.freeRelisten === 'boolean') out.freeRelisten = r.freeRelisten;
   if (typeof r.showStrip === 'boolean') out.showStrip = r.showStrip;
   return out;
 }

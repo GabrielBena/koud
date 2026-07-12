@@ -17,6 +17,7 @@ import { ExerciseScreen } from './components/ExerciseScreen';
 import { FirstRunWizard } from './components/FirstRunWizard';
 import { SettingsSheet } from './components/SettingsSheet';
 import { useHold } from './components/useHold';
+import { useWakeLock } from './components/useWakeLock';
 
 export default function App() {
   const [settings, setSettingsState] = useState<Settings>(() => loadSettings());
@@ -72,9 +73,16 @@ export default function App() {
     setExercise(ex);
   };
 
+  // Écran maintenu allumé tant qu'une session est en cours.
+  useWakeLock(exercise !== null);
+
+  const holdStartedAtRef = useRef(0);
+
   const onHoldStart = () => {
     const ex = exerciseRef.current;
     if (!ex) return;
+    holdStartedAtRef.current = performance.now();
+    if ('vibrate' in navigator) navigator.vibrate(12);
     const s = settingsRef.current;
     if (s.beginnerMode) {
       const hook = findHook(pairKey(ex.def, ex.dir));
@@ -103,6 +111,10 @@ export default function App() {
     onHoldStart,
     onHoldRelease: () => {
       clearHold();
+      // Mode révision : une vraie tenue ne fait que réécouter (on peut
+      // re-tenir autant qu'on veut) ; seul un appui bref passe au suivant.
+      const heldMs = performance.now() - holdStartedAtRef.current;
+      if (settingsRef.current.freeRelisten && heldMs >= 250) return;
       advance();
     },
     // Appel entrant, écran verrouillé, geste volé par le navigateur :

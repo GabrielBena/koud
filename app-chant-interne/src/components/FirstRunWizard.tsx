@@ -6,11 +6,10 @@ import { useEffect, useRef, useState } from 'react';
 import { audio } from '../audio/engine';
 import { spellMidi } from '../lib/theory';
 import { Keyboard } from './Keyboard';
-import { whiteIndexOf } from './RangePicker';
+import { PICKER_WHITE_W, whiteIndexOf } from './RangePicker';
 
 const FROM = 36; // C2
 const TO = 96; // C7
-const WHITE_W = 34;
 
 export interface FirstRunWizardProps {
   onDone(low: number, high: number): void;
@@ -27,7 +26,7 @@ export function FirstRunWizard({ onDone }: FirstRunWizardProps) {
     const el = scrollRef.current;
     if (el && (step === 'low' || step === 'high')) {
       const target = step === 'low' ? 48 : (low ?? 48) + 12; // autour de C3 puis une octave au-dessus de la grave
-      el.scrollLeft = Math.max(0, whiteIndexOf(target) * WHITE_W - el.clientWidth / 2);
+      el.scrollLeft = Math.max(0, whiteIndexOf(target) * PICKER_WHITE_W - el.clientWidth / 2);
     }
   }, [step, low]);
 
@@ -93,7 +92,7 @@ export function FirstRunWizard({ onDone }: FirstRunWizardProps) {
           <Keyboard
             from={FROM}
             to={TO}
-            whiteWidth={WHITE_W}
+            whiteWidth={PICKER_WHITE_W}
             whiteHeight={150}
             labelCs
             highlights={highlights}
