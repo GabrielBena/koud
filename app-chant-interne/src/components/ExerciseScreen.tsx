@@ -116,10 +116,13 @@ export function ExerciseScreen({
         type="button"
         className={`next-btn${holding ? ' next-btn--holding' : ''}`}
         disabled={!holdEnabled}
-        aria-label="Suivant — maintenir pour entendre la note à chanter, relâcher pour continuer"
+        aria-label="Maintenir pour entendre la note à chanter ; glisser vers le haut pour l'exercice suivant"
         {...holdHandlers}
       >
-        NEXT
+        <span className="next-label">NEXT</span>
+        <span className="next-hint">
+          {holding ? 'glisse ↑ pour le suivant' : 'tenir : écouter · glisser ↑ : suivant'}
+        </span>
       </button>
     </div>
   );

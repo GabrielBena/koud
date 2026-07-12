@@ -2,7 +2,8 @@
 
 Mini-app d'entraînement au **chant intérieur** (audiation) pour Theo : tu
 entends une note, tu chantes la note à l'intervalle demandé, tu tiens **NEXT**
-pour vérifier, tu lâches pour l'exercice suivant.
+pour vérifier (réécoute libre : relâcher reste sur l'exercice), tu **glisses
+vers le haut** en tenant pour passer au suivant.
 
 L'astuce centrale de la spec (`app chant intérieur.pdf`) : la note jouée (NE)
 est tirée dans l'ambitus vocal **translaté de l'intervalle** — la note à
@@ -33,8 +34,9 @@ npm run preview      # sert dist/ en local
 - `src/audio/engine.ts` : `lookAhead = 0.02` (sinon le bouton est pâteux),
   `Tone.start()` rappelé à chaque chemin de lecture, repli orgue tant que le
   piano n'est pas décodé.
-- Bouton NEXT (`useHold.ts`) : Pointer Events + capture ; `pointercancel` /
-  écran verrouillé = **abandon** (le son se coupe, l'exercice ne saute pas).
+- Bouton NEXT (`useHold.ts`) : Pointer Events + capture ; tenir = écouter,
+  swipe ↑ (70 px) = suivant ; `pointercancel` / écran verrouillé = simple
+  relâcher (le son se coupe, l'exercice ne saute jamais).
 - Banque d'airs (`songBank.ts`) : les entrées `verified: false` ne jouent
   jamais tant que Theo ne les a pas validées ; un test d'intégrité garantit
   que le premier saut de chaque air est bien l'intervalle annoncé.

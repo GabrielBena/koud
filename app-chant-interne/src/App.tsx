@@ -76,12 +76,9 @@ export default function App() {
   // Écran maintenu allumé tant qu'une session est en cours.
   useWakeLock(exercise !== null);
 
-  const holdStartedAtRef = useRef(0);
-
   const onHoldStart = () => {
     const ex = exerciseRef.current;
     if (!ex) return;
-    holdStartedAtRef.current = performance.now();
     if ('vibrate' in navigator) navigator.vibrate(12);
     const s = settingsRef.current;
     if (s.beginnerMode) {
@@ -109,19 +106,13 @@ export default function App() {
   const { holding, handlers } = useHold({
     enabled: exercise !== null && !sheetOpen,
     onHoldStart,
-    onHoldRelease: () => {
+    // Relâché ou interrompu : le son se coupe, on RESTE sur l'exercice
+    // (réécoute libre) — seul le swipe ↑ fait avancer.
+    onHoldEnd: clearHold,
+    onNext: () => {
       clearHold();
-      // Mode révision : une vraie tenue ne fait que réécouter (on peut
-      // re-tenir autant qu'on veut) ; seul un appui bref passe au suivant.
-      const heldMs = performance.now() - holdStartedAtRef.current;
-      if (settingsRef.current.freeRelisten && heldMs >= 250) return;
+      if ('vibrate' in navigator) navigator.vibrate(20);
       advance();
-    },
-    // Appel entrant, écran verrouillé, geste volé par le navigateur :
-    // on coupe le son mais on reste sur le même exercice.
-    onHoldAbort: () => {
-      clearHold();
-      audio.stopAll();
     },
   });
 

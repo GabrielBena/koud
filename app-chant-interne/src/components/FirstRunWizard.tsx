@@ -57,7 +57,8 @@ export function FirstRunWizard({ onDone }: FirstRunWizardProps) {
           <h1>Chant intérieur</h1>
           <p>
             Tu entends une note, tu chantes la note à l’intervalle demandé, puis tu tiens{' '}
-            <b>NEXT</b> pour vérifier. Lâche : exercice suivant.
+            <b>NEXT</b> pour vérifier — réécoute autant que tu veux. Glisse vers le haut
+            (en tenant) : exercice suivant.
           </p>
           <p>D’abord, réglons ton ambitus de chant.</p>
         </div>

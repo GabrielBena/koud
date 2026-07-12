@@ -133,12 +133,6 @@ export function SettingsSheet({ settings, onPatch, onClose }: SettingsSheetProps
           }
         />
         <OptionRow
-          label="Réécouter librement (mode révision)"
-          hint="Tenir NEXT rejoue sans avancer ; un appui bref passe au suivant"
-          checked={settings.freeRelisten}
-          onToggle={() => onPatch({ freeRelisten: !settings.freeRelisten })}
-        />
-        <OptionRow
           label="Mode débutant (airs connus)"
           hint="NEXT joue un air célèbre qui commence par l’intervalle"
           checked={settings.beginnerMode}
