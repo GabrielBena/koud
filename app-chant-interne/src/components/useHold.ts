@@ -16,6 +16,8 @@ export interface UseHoldOptions {
   onHoldEnd(): void;
   /** Swipe ↑ en tenant (ou ↑ / N / Entrée au clavier) : exercice suivant. */
   onNext(): void;
+  /** Progression du swipe, 0 → 1 (pour l'animation) ; remise à 0 en fin de geste. */
+  onDrag?(ratio: number): void;
 }
 
 export interface HoldHandlers {
@@ -47,6 +49,7 @@ export function useHold(opts: UseHoldOptions): { holding: boolean; handlers: Hol
     activeRef.current = id;
     startYRef.current = y;
     setHolding(true);
+    optsRef.current.onDrag?.(0);
     optsRef.current.onHoldStart();
     return true;
   }, []);
@@ -55,6 +58,7 @@ export function useHold(opts: UseHoldOptions): { holding: boolean; handlers: Hol
     if (activeRef.current !== id) return;
     activeRef.current = null;
     setHolding(false);
+    optsRef.current.onDrag?.(0);
     optsRef.current.onHoldEnd();
   }, []);
 
@@ -64,6 +68,7 @@ export function useHold(opts: UseHoldOptions): { holding: boolean; handlers: Hol
       activeRef.current = null;
       setHolding(false);
     }
+    optsRef.current.onDrag?.(0);
     optsRef.current.onNext();
   }, []);
 
@@ -113,7 +118,12 @@ export function useHold(opts: UseHoldOptions): { holding: boolean; handlers: Hol
     // Grâce à la capture, on suit le doigt même sorti du bouton.
     onPointerMove: (e) => {
       if (activeRef.current !== e.pointerId) return;
-      if (startYRef.current - e.clientY > SWIPE_PX) next();
+      const dy = startYRef.current - e.clientY;
+      if (dy > SWIPE_PX) {
+        next();
+      } else {
+        optsRef.current.onDrag?.(Math.max(0, dy / SWIPE_PX));
+      }
     },
     onPointerUp: (e) => end(e.pointerId),
     onPointerCancel: (e) => end(e.pointerId),

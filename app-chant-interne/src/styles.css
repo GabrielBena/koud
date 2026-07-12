@@ -154,11 +154,12 @@ svg text {
 }
 
 .next-btn {
+  --swipe: 0;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
   margin: 10px 14px calc(14px + env(safe-area-inset-bottom));
   height: 96px;
   border-radius: 20px;
@@ -172,6 +173,27 @@ svg text {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+  overflow: hidden;
+}
+
+/* lueur qui « charge » vers le haut à mesure que le swipe progresse */
+.next-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45), transparent 55%);
+  opacity: var(--swipe);
+  pointer-events: none;
+}
+
+.next-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transform: translateY(calc(var(--swipe) * -8px));
+  will-change: transform;
 }
 
 .next-hint {
@@ -179,6 +201,61 @@ svg text {
   font-weight: 600;
   letter-spacing: 0.02em;
   opacity: 0.7;
+}
+
+/* chevrons d'affordance : visibles pendant la tenue, suivent le doigt */
+.next-chevrons {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  transform: translate(-50%, calc(var(--swipe) * -5px));
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.next-btn--holding .next-chevrons {
+  opacity: calc(0.45 + var(--swipe) * 0.55);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .next-btn--holding .chev-float {
+    animation: chev-float 1.15s ease-in-out infinite;
+  }
+
+  .next-btn--flick .next-inner {
+    animation: flick-up 0.24s ease-out;
+  }
+}
+
+@keyframes chev-float {
+  0%,
+  100% {
+    transform: translateY(2px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes flick-up {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  60% {
+    transform: translateY(-22px);
+    opacity: 0;
+  }
+  61% {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .next-btn--holding {

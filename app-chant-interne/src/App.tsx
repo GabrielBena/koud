@@ -2,7 +2,7 @@
 // sémantique tenir/lâcher/abandonner, assistant de premier lancement.
 // Toute lecture audio part d'un gestionnaire d'événement, jamais d'un effet.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { audio } from './audio/engine';
 import { PairBag } from './lib/bag';
 import { drawExercise, type Exercise } from './lib/exercise';
@@ -103,6 +103,17 @@ export default function App() {
     stopHoldRef.current = null;
   };
 
+  // Animation du swipe : la progression écrit une variable CSS directement
+  // sur le bouton (zéro re-render pendant le glissé) ; le « flick » de
+  // validation est une classe transitoire.
+  const nextBtnRef: RefObject<HTMLButtonElement | null> = useRef(null);
+  const [flicking, setFlicking] = useState(false);
+  useEffect(() => {
+    if (!flicking) return;
+    const t = setTimeout(() => setFlicking(false), 280);
+    return () => clearTimeout(t);
+  }, [flicking]);
+
   const { holding, handlers } = useHold({
     enabled: exercise !== null && !sheetOpen,
     onHoldStart,
@@ -112,7 +123,11 @@ export default function App() {
     onNext: () => {
       clearHold();
       if ('vibrate' in navigator) navigator.vibrate(20);
+      setFlicking(true);
       advance();
+    },
+    onDrag: (ratio) => {
+      nextBtnRef.current?.style.setProperty('--swipe', ratio.toFixed(3));
     },
   });
 
@@ -176,6 +191,8 @@ export default function App() {
           holding={holding}
           holdHandlers={handlers}
           holdEnabled={exercise !== null && !sheetOpen}
+          nextBtnRef={nextBtnRef}
+          flicking={flicking}
           onStart={startSession}
           onReplayNe={replayNe}
           onOpenSettings={openSheet}

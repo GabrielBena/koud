@@ -2,7 +2,7 @@
 // gauche, l'intervalle en énorme au centre (toucher = réécouter NE),
 // bandeau clavier optionnel, gros NEXT vert en bas.
 
-import { useMemo } from 'react';
+import { useMemo, type RefObject } from 'react';
 import type { Exercise } from '../lib/exercise';
 import { snapToWhite } from '../lib/keyboardLayout';
 import { pairLabel, parsePairKey, spellPair } from '../lib/theory';
@@ -16,6 +16,9 @@ export interface ExerciseScreenProps {
   holding: boolean;
   holdHandlers: HoldHandlers;
   holdEnabled: boolean;
+  nextBtnRef: RefObject<HTMLButtonElement | null>;
+  /** Impulsion visuelle brève après un swipe validé */
+  flicking: boolean;
   onStart(): void;
   onReplayNe(): void;
   onOpenSettings(): void;
@@ -27,6 +30,8 @@ export function ExerciseScreen({
   holding,
   holdHandlers,
   holdEnabled,
+  nextBtnRef,
+  flicking,
   onStart,
   onReplayNe,
   onOpenSettings,
@@ -114,14 +119,38 @@ export function ExerciseScreen({
 
       <button
         type="button"
-        className={`next-btn${holding ? ' next-btn--holding' : ''}`}
+        ref={nextBtnRef}
+        className={`next-btn${holding ? ' next-btn--holding' : ''}${flicking ? ' next-btn--flick' : ''}`}
         disabled={!holdEnabled}
         aria-label="Maintenir pour entendre la note à chanter ; glisser vers le haut pour l'exercice suivant"
         {...holdHandlers}
       >
-        <span className="next-label">NEXT</span>
-        <span className="next-hint">
-          {holding ? 'glisse ↑ pour le suivant' : 'tenir : écouter · glisser ↑ : suivant'}
+        <span className="next-chevrons" aria-hidden="true">
+          <svg className="chev-float" viewBox="0 0 24 20" width="26" height="22">
+            <path
+              d="M4 16 L12 9 L20 16"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              opacity="0.5"
+            />
+            <path
+              d="M4 9.5 L12 2.5 L20 9.5"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </span>
+        <span className="next-inner">
+          <span className="next-label">NEXT</span>
+          <span className="next-hint">
+            {holding ? 'glisse ↑ pour le suivant' : 'tenir : écouter · glisser ↑ : suivant'}
+          </span>
         </span>
       </button>
     </div>
