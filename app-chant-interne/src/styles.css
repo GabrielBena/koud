@@ -383,6 +383,37 @@ svg text {
   color: #fbbf24;
 }
 
+/* détection d'ambitus au micro (optionnelle) */
+
+.voice-capture {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.voice-live .live-note {
+  color: var(--text);
+  font-size: 17px;
+}
+
+.voice-error {
+  color: #fbbf24;
+}
+
+.mic-pulse {
+  animation: mic-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
 /* options */
 
 .opt-row {

@@ -7,6 +7,7 @@ import { audio } from '../audio/engine';
 import { spellMidi } from '../lib/theory';
 import { Keyboard } from './Keyboard';
 import { PICKER_WHITE_W, whiteIndexOf } from './RangePicker';
+import { VoiceCapture } from './VoiceCapture';
 
 const FROM = 36; // C2
 const TO = 96; // C7
@@ -102,6 +103,13 @@ export function FirstRunWizard({ onDone }: FirstRunWizardProps) {
             onKeyCommit={commit}
           />
         </div>
+        <VoiceCapture
+          label={step === 'low' ? 'note grave' : 'note aiguë'}
+          onUse={(midi) => {
+            commit(midi);
+            audio.playNote(midi);
+          }}
+        />
         <div className="picker-msg" role="status">
           {msg}
         </div>

@@ -6,6 +6,7 @@ import { audio } from '../audio/engine';
 import { isBlackKey } from '../lib/keyboardLayout';
 import { spellMidi } from '../lib/theory';
 import { Keyboard } from './Keyboard';
+import { VoiceCapture } from './VoiceCapture';
 
 const FROM = 36; // C2
 const TO = 96; // C7
@@ -83,6 +84,13 @@ export function RangePicker({ low, high, onChange }: RangePickerProps) {
           Note aiguë <b>{spellMidi(high).text}</b>
         </button>
       </div>
+      <VoiceCapture
+        label={armed === 'low' ? 'note grave' : 'note aiguë'}
+        onUse={(midi) => {
+          commit(midi);
+          audio.playNote(midi);
+        }}
+      />
       <div className="keys-scroll" ref={scrollRef}>
         <Keyboard
           from={FROM}

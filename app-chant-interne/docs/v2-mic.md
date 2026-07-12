@@ -1,6 +1,10 @@
 # v2 — Micro : détection de hauteur, ambitus automatique, scoring
 
-Scoping (juillet 2026). Rien ici n'est implémenté ; v1 reste 100 % auto-évaluée.
+Scoping (juillet 2026).
+**État : v2.0 (ambitus auto) implémentée** — `src/lib/pitch.ts` (YIN pur,
+testé), `src/audio/mic.ts` (capture), `src/components/VoiceCapture.tsx`
+(bouton 🎤 optionnel dans l'assistant et les réglages ; le clavier manuel
+reste le défaut). v2.1 scoring et v2.2 mains libres : à faire.
 
 ## Faisabilité — courte réponse : oui, et tout reste sur l'appareil
 
